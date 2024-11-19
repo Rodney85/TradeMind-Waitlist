@@ -2,29 +2,54 @@
 import React from "react";
 import { BackgroundBeams } from "./ui/background-beams";
 import { WaitlistForm } from "./waitlist-form";
+import { motion } from "framer-motion";
 
 export function HeroSection() {
   return (
-    <div className="relative min-h-[90vh] w-full bg-black flex flex-col items-center justify-center antialiased">
-      <div className="max-w-2xl mx-auto p-4 sm:p-6 relative z-10">
-        <div className="flex items-center justify-center mb-4 sm:mb-6">
-          <span className="px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium">
-            Coming Soon
-          </span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-4 sm:mb-6 max-w-[800px] mx-auto text-center text-white leading-[1.1]">
-          Master Your Trading Psychology with AI
-        </h1>
-        <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-[600px] mx-auto mb-6 sm:mb-8 text-center leading-relaxed px-2">
-          Transform your trading performance with AI-powered insights and systematic journaling
-        </p>
-        <div className="flex flex-col items-center gap-4 sm:gap-6 px-2 sm:px-4">
-          <WaitlistForm />
-          <p className="text-sm text-white/60">
-            Join 1,000+ traders already on the waitlist
-          </p>
-        </div>
+    <div className="relative min-h-screen w-full bg-black flex flex-col items-center justify-center antialiased px-4 sm:px-6 py-10 sm:py-16">
+      <div className="max-w-4xl mx-auto relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-8 sm:space-y-12"
+        >
+          {/* Main Headline */}
+          <div className="space-y-4 sm:space-y-6">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-center"
+            >
+              <span className="block text-white mb-1 sm:mb-2 leading-[1.1]">Master Your</span>
+              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 leading-[1.1]">
+                Trading Psychology
+              </span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-lg sm:text-xl md:text-2xl text-white/60 max-w-[600px] mx-auto text-center font-light"
+            >
+              AI-powered insights to transform your trading performance
+            </motion.p>
+          </div>
+
+          {/* Waitlist Form */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="w-full"
+          >
+            <WaitlistForm />
+          </motion.div>
+        </motion.div>
       </div>
+
       <BackgroundBeams />
     </div>
   );
