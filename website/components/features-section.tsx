@@ -68,15 +68,15 @@ export function FeaturesSection() {
         </div>
       </div>
       <div className="relative z-10">
-        <div className="text-center max-w-3xl mx-auto px-4 pt-20 pb-16">
-          <h2 className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-5xl">
+        <div className="text-center max-w-3xl mx-auto px-4 pt-16 sm:pt-20 pb-8 sm:pb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
             Transform Your Trading Psychology
           </h2>
-          <p className="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-neutral-600 dark:text-neutral-300 px-2">
             Harness the power of AI to understand your trading patterns, manage emotions, and make better decisions. Our comprehensive suite of tools is designed to help you achieve consistent trading success.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 py-10 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 py-6 sm:py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {features.map((feature, index) => (
             <Feature key={feature.title} {...feature} index={index} />
           ))}
@@ -100,29 +100,29 @@ const Feature = ({
   return (
     <div
       className={cn(
-        "flex flex-col lg:border-r py-10 relative group/feature dark:border-neutral-800",
-        (index === 0 || index === 4) && "lg:border-l dark:border-neutral-800",
-        index < 4 && "lg:border-b dark:border-neutral-800"
+        "relative overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800",
+        "bg-white dark:bg-neutral-950",
+        "p-6 sm:p-8"
       )}
     >
-      {index < 4 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-neutral-100 dark:from-neutral-800 to-transparent pointer-events-none" />
-      )}
-      {index >= 4 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-neutral-100 dark:from-neutral-800 to-transparent pointer-events-none" />
-      )}
-      <div className="mb-4 relative z-10 px-10 text-neutral-600 dark:text-neutral-400">
-        {icon}
+      <div className="flex flex-col h-full gap-4">
+        <div className="flex items-center gap-4">
+          <div
+            className={cn(
+              "flex h-12 w-12 shrink-0 items-center justify-center rounded-full",
+              "bg-neutral-100 dark:bg-neutral-900"
+            )}
+          >
+            {icon}
+          </div>
+          <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+            {title}
+          </h3>
+        </div>
+        <p className="text-sm sm:text-base leading-6 text-neutral-600 dark:text-neutral-300">
+          {description}
+        </p>
       </div>
-      <div className="text-lg font-bold mb-2 relative z-10 px-10">
-        <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover/feature:bg-blue-500 transition-all duration-200 origin-center" />
-        <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-800 dark:text-neutral-100">
-          {title}
-        </span>
-      </div>
-      <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10 px-10">
-        {description}
-      </p>
     </div>
   );
 };
