@@ -27,7 +27,7 @@ A modern, minimalistic landing page for TradeMind - an AI-powered trading psycho
 
 1. Clone the repository:
 ```bash
-git clone [(https://github.com/Rodney85/TradeMind-Waitlist.git)]
+git clone https://github.com/Rodney85/TradeMind-Waitlist.git
 cd TM-LandingPage
 ```
 
