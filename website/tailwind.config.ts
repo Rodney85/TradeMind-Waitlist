@@ -65,6 +65,19 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        neutral: {
+          50: 'rgb(var(--neutral-50) / <alpha-value>)',
+          100: 'rgb(var(--neutral-100) / <alpha-value>)',
+          200: 'rgb(var(--neutral-200) / <alpha-value>)',
+          300: 'rgb(var(--neutral-300) / <alpha-value>)',
+          400: 'rgb(var(--neutral-400) / <alpha-value>)',
+          500: 'rgb(var(--neutral-500) / <alpha-value>)',
+          600: 'rgb(var(--neutral-600) / <alpha-value>)',
+          700: 'rgb(var(--neutral-700) / <alpha-value>)',
+          800: 'rgb(var(--neutral-800) / <alpha-value>)',
+          900: 'rgb(var(--neutral-900) / <alpha-value>)',
+          950: 'rgb(var(--neutral-950) / <alpha-value>)',
+        },
       },
       keyframes: {
         'accordion-down': {
@@ -90,6 +103,26 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    function ({ addBase }: any) {
+      addBase({
+        ':root': {
+          '--neutral-50': '250 250 250',
+          '--neutral-100': '244 244 245',
+          '--neutral-200': '228 228 231',
+          '--neutral-300': '212 212 216',
+          '--neutral-400': '161 161 170',
+          '--neutral-500': '113 113 122',
+          '--neutral-600': '82 82 91',
+          '--neutral-700': '63 63 70',
+          '--neutral-800': '39 39 42',
+          '--neutral-900': '24 24 27',
+          '--neutral-950': '9 9 11',
+        },
+      });
+    },
+  ],
 };
+
 export default config;
