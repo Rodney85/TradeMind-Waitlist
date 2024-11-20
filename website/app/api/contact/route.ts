@@ -77,16 +77,27 @@ export async function POST(request: Request) {
 
     console.log('Attempting MongoDB connection...');
 
-    // Connect to MongoDB with retry logic
-    client = await withRetry(async () => {
-      console.log('Connecting to MongoDB...');
-      const client = await clientPromise;
-      // Test the connection
-      console.log('Testing MongoDB connection...');
-      await client.db('admin').command({ ping: 1 });
-      console.log('MongoDB connection successful');
-      return client;
-    });
+    try {
+      // Connect to MongoDB with retry logic
+      client = await withRetry(async () => {
+        console.log('Connecting to MongoDB...');
+        const client = await clientPromise;
+        // Test the connection
+        console.log('Testing MongoDB connection...');
+        await client.db('admin').command({ ping: 1 });
+        console.log('MongoDB connection successful');
+        return client;
+      });
+    } catch (connError) {
+      console.error('MongoDB connection failed after retries:', {
+        error: connError instanceof Error ? {
+          name: connError.name,
+          message: connError.message,
+          stack: connError.stack
+        } : connError
+      });
+      throw connError;
+    }
 
     const db = client.db('tm-landing-page')
     
@@ -94,16 +105,27 @@ export async function POST(request: Request) {
 
     // Insert the contact form submission with retry logic
     const result = await withRetry(async () => {
-      return await db.collection('contacts').insertOne({
-        name,
-        email,
-        message,
-        createdAt: new Date(),
-        metadata: {
-          userAgent: request.headers.get('user-agent'),
-          timestamp: new Date().toISOString()
-        }
-      });
+      try {
+        return await db.collection('contacts').insertOne({
+          name,
+          email,
+          message,
+          createdAt: new Date(),
+          metadata: {
+            userAgent: request.headers.get('user-agent'),
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (insertError) {
+        console.error('Error inserting contact form:', {
+          error: insertError instanceof Error ? {
+            name: insertError.name,
+            message: insertError.message,
+            stack: insertError.stack
+          } : insertError
+        });
+        throw insertError;
+      }
     });
 
     console.log('Successfully saved contact form:', { id: result.insertedId });
@@ -144,11 +166,11 @@ export async function POST(request: Request) {
 
     // Determine if it's a connection error
     const isConnectionError = error instanceof Error && 
-      (error.message.includes('connect') || 
-       error.message.includes('timeout') ||
-       error.message.includes('network') ||
-       error.message.includes('ssl') ||
-       error.message.includes('tls'));
+      (error.message.toLowerCase().includes('connect') || 
+       error.message.toLowerCase().includes('timeout') ||
+       error.message.toLowerCase().includes('network') ||
+       error.message.toLowerCase().includes('ssl') ||
+       error.message.toLowerCase().includes('tls'));
 
     // Log the error type we're returning
     console.log('Returning error response:', {
@@ -174,5 +196,13 @@ export async function POST(request: Request) {
         }
       }
     )
+  } finally {
+    if (client) {
+      try {
+        await client.close();
+      } catch (closeError) {
+        console.error('Error closing MongoDB connection:', closeError);
+      }
+    }
   }
 }

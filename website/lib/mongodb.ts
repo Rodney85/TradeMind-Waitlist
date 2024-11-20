@@ -7,12 +7,14 @@ if (!process.env.MONGODB_URI) {
 const uri = process.env.MONGODB_URI
 const options: MongoClientOptions = {
   maxPoolSize: 10,
-  serverSelectionTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 45000,
-  connectTimeoutMS: 10000,
+  connectTimeoutMS: 30000,
   retryWrites: true,
   retryReads: true,
   tls: true,
+  tlsInsecure: false,
+  directConnection: false,
   w: 'majority'
 }
 
@@ -28,16 +30,17 @@ async function connectToDatabase(): Promise<MongoClient> {
     if (client) {
       // Check if the existing client is connected
       await client.db('admin').command({ ping: 1 })
+      console.log('Reusing existing MongoDB connection')
       return client
     }
   } catch (e) {
     // If ping fails, create a new client
-    console.log('MongoDB connection lost, creating new client')
+    console.error('MongoDB connection error:', e)
     if (client) {
       try {
         await client.close()
-      } catch (e) {
-        console.error('Error closing MongoDB client:', e)
+      } catch (closeError) {
+        console.error('Error closing MongoDB client:', closeError)
       }
     }
   }
@@ -51,7 +54,13 @@ async function connectToDatabase(): Promise<MongoClient> {
     console.log('MongoDB connected successfully')
     return client
   } catch (e) {
-    console.error('MongoDB connection error:', e)
+    console.error('MongoDB connection error:', {
+      error: e instanceof Error ? {
+        name: e.name,
+        message: e.message,
+        stack: e.stack
+      } : e
+    })
     throw e
   }
 }
