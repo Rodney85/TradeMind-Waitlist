@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
-import { MongoClient } from 'mongodb'
+import { MongoClient, MongoServerError } from 'mongodb'
 
 export async function OPTIONS() {
   return new NextResponse(null, {
@@ -99,6 +99,10 @@ export async function POST(request: Request) {
         email,
         message,
         createdAt: new Date(),
+        metadata: {
+          userAgent: request.headers.get('user-agent'),
+          timestamp: new Date().toISOString()
+        }
       });
     });
 
@@ -129,11 +133,22 @@ export async function POST(request: Request) {
       mongoClientConnected: !!client
     });
 
+    // Handle specific MongoDB errors
+    if (error instanceof MongoServerError) {
+      console.error('MongoDB Server Error:', {
+        code: error.code,
+        codeName: error.codeName,
+        message: error.message
+      });
+    }
+
     // Determine if it's a connection error
     const isConnectionError = error instanceof Error && 
       (error.message.includes('connect') || 
        error.message.includes('timeout') ||
-       error.message.includes('network'));
+       error.message.includes('network') ||
+       error.message.includes('ssl') ||
+       error.message.includes('tls'));
 
     // Log the error type we're returning
     console.log('Returning error response:', {

@@ -12,7 +12,11 @@ const options: MongoClientOptions = {
   connectTimeoutMS: 10000,
   retryWrites: true,
   retryReads: true,
-  w: 'majority',
+  ssl: true,
+  tls: true,
+  tlsAllowInvalidCertificates: true,
+  tlsAllowInvalidHostnames: true,
+  w: 'majority'
 }
 
 let client: MongoClient
@@ -42,8 +46,10 @@ async function connectToDatabase(): Promise<MongoClient> {
   }
 
   try {
+    console.log('Initializing new MongoDB connection...')
     client = new MongoClient(uri, options)
     await client.connect()
+    console.log('Testing MongoDB connection...')
     await client.db('admin').command({ ping: 1 })
     console.log('MongoDB connected successfully')
     return client
