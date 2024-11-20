@@ -12,10 +12,7 @@ const options: MongoClientOptions = {
   connectTimeoutMS: 10000,
   retryWrites: true,
   retryReads: true,
-  ssl: true,
   tls: true,
-  tlsAllowInvalidCertificates: true,
-  tlsAllowInvalidHostnames: true,
   w: 'majority'
 }
 
