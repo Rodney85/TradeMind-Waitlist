@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
-import { MongoClient, MongoServerError } from 'mongodb'
 
 export async function OPTIONS() {
   return new NextResponse(null, {
@@ -13,32 +12,8 @@ export async function OPTIONS() {
   })
 }
 
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second
-
-async function withRetry<T>(operation: () => Promise<T>, retries = MAX_RETRIES): Promise<T> {
-  try {
-    return await operation();
-  } catch (error) {
-    if (retries > 0) {
-      console.log(`Retrying operation, ${retries} attempts remaining`);
-      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-      return withRetry(operation, retries - 1);
-    }
-    throw error;
-  }
-}
-
 export async function POST(request: Request) {
-  let client: MongoClient | null = null;
-  
   try {
-    // Log environment variables (excluding sensitive values)
-    console.log('Environment check:', {
-      hasMongoUri: !!process.env.MONGODB_URI,
-      nodeEnv: process.env.NODE_ENV,
-    });
-
     const body = await request.json()
     const { name, email, message } = body
 
@@ -75,65 +50,33 @@ export async function POST(request: Request) {
       )
     }
 
-    console.log('Attempting MongoDB connection...');
+    // Connect to MongoDB
+    const client = await clientPromise
+    const db = client.db('tm-landing')
+    const collection = db.collection('contacts')
 
-    try {
-      // Connect to MongoDB with retry logic
-      client = await withRetry(async () => {
-        console.log('Connecting to MongoDB...');
-        const client = await clientPromise;
-        // Test the connection
-        console.log('Testing MongoDB connection...');
-        await client.db('admin').command({ ping: 1 });
-        console.log('MongoDB connection successful');
-        return client;
-      });
-    } catch (connError) {
-      console.error('MongoDB connection failed after retries:', {
-        error: connError instanceof Error ? {
-          name: connError.name,
-          message: connError.message,
-          stack: connError.stack
-        } : connError
-      });
-      throw connError;
-    }
+    // Store the submission
+    const result = await collection.insertOne({
+      name,
+      email,
+      message,
+      timestamp: new Date(),
+      userAgent: request.headers.get('user-agent'),
+      status: 'new'
+    })
 
-    const db = client.db('tm-landing-page')
-    
-    console.log('Attempting to insert contact form submission...');
-
-    // Insert the contact form submission with retry logic
-    const result = await withRetry(async () => {
-      try {
-        return await db.collection('contacts').insertOne({
-          name,
-          email,
-          message,
-          createdAt: new Date(),
-          metadata: {
-            userAgent: request.headers.get('user-agent'),
-            timestamp: new Date().toISOString()
-          }
-        });
-      } catch (insertError) {
-        console.error('Error inserting contact form:', {
-          error: insertError instanceof Error ? {
-            name: insertError.name,
-            message: insertError.message,
-            stack: insertError.stack
-          } : insertError
-        });
-        throw insertError;
-      }
+    console.log('Form submission stored in MongoDB:', {
+      name,
+      email,
+      message,
+      timestamp: new Date().toISOString(),
+      userAgent: request.headers.get('user-agent'),
+      mongoId: result.insertedId
     });
-
-    console.log('Successfully saved contact form:', { id: result.insertedId });
 
     return new NextResponse(
       JSON.stringify({
         success: true,
-        id: result.insertedId,
         message: 'Contact form submitted successfully'
       }),
       {
@@ -145,64 +88,20 @@ export async function POST(request: Request) {
       }
     )
   } catch (error) {
-    console.error('Detailed error in contact form submission:', {
-      errorType: error?.constructor?.name,
-      error: error instanceof Error ? {
-        name: error.name,
-        message: error.message,
-        stack: error.stack
-      } : error,
-      mongoClientConnected: !!client
-    });
-
-    // Handle specific MongoDB errors
-    if (error instanceof MongoServerError) {
-      console.error('MongoDB Server Error:', {
-        code: error.code,
-        codeName: error.codeName,
-        message: error.message
-      });
-    }
-
-    // Determine if it's a connection error
-    const isConnectionError = error instanceof Error && 
-      (error.message.toLowerCase().includes('connect') || 
-       error.message.toLowerCase().includes('timeout') ||
-       error.message.toLowerCase().includes('network') ||
-       error.message.toLowerCase().includes('ssl') ||
-       error.message.toLowerCase().includes('tls'));
-
-    // Log the error type we're returning
-    console.log('Returning error response:', {
-      isConnectionError,
-      statusCode: isConnectionError ? 503 : 500,
-      errorMessage: isConnectionError 
-        ? 'Unable to connect to the database. Please try again later.'
-        : 'Failed to submit contact form. Please try again later.'
-    });
+    console.error('Error in contact form submission:', error);
 
     return new NextResponse(
       JSON.stringify({
-        error: isConnectionError 
-          ? 'Unable to connect to the database. Please try again later.'
-          : 'Failed to submit contact form. Please try again later.',
+        error: 'Failed to submit contact form. Please try again later.',
         details: error instanceof Error ? error.message : 'Unknown error'
       }),
       {
-        status: isConnectionError ? 503 : 500,
+        status: 500,
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
         }
       }
     )
-  } finally {
-    if (client) {
-      try {
-        await client.close();
-      } catch (closeError) {
-        console.error('Error closing MongoDB connection:', closeError);
-      }
-    }
   }
 }
