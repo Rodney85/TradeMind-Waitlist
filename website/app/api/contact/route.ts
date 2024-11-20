@@ -33,13 +33,29 @@ export async function POST(request: Request) {
   let client: MongoClient | null = null;
   
   try {
+    // Log environment variables (excluding sensitive values)
+    console.log('Environment check:', {
+      hasMongoUri: !!process.env.MONGODB_URI,
+      nodeEnv: process.env.NODE_ENV,
+    });
+
     const body = await request.json()
     const { name, email, message } = body
 
-    console.log('Received contact form submission:', { name, email });
+    console.log('Received contact form submission:', { 
+      name, 
+      email,
+      messageLength: message?.length 
+    });
 
     // Validate the input
     if (!name || !email || !message) {
+      console.log('Validation failed:', { 
+        hasName: !!name, 
+        hasEmail: !!email, 
+        hasMessage: !!message 
+      });
+
       return new NextResponse(
         JSON.stringify({
           error: 'Missing required fields',
@@ -59,16 +75,23 @@ export async function POST(request: Request) {
       )
     }
 
+    console.log('Attempting MongoDB connection...');
+
     // Connect to MongoDB with retry logic
     client = await withRetry(async () => {
+      console.log('Connecting to MongoDB...');
       const client = await clientPromise;
       // Test the connection
+      console.log('Testing MongoDB connection...');
       await client.db('admin').command({ ping: 1 });
+      console.log('MongoDB connection successful');
       return client;
     });
 
     const db = client.db('tm-landing-page')
     
+    console.log('Attempting to insert contact form submission...');
+
     // Insert the contact form submission with retry logic
     const result = await withRetry(async () => {
       return await db.collection('contacts').insertOne({
@@ -97,6 +120,7 @@ export async function POST(request: Request) {
     )
   } catch (error) {
     console.error('Detailed error in contact form submission:', {
+      errorType: error?.constructor?.name,
       error: error instanceof Error ? {
         name: error.name,
         message: error.message,
@@ -110,6 +134,15 @@ export async function POST(request: Request) {
       (error.message.includes('connect') || 
        error.message.includes('timeout') ||
        error.message.includes('network'));
+
+    // Log the error type we're returning
+    console.log('Returning error response:', {
+      isConnectionError,
+      statusCode: isConnectionError ? 503 : 500,
+      errorMessage: isConnectionError 
+        ? 'Unable to connect to the database. Please try again later.'
+        : 'Failed to submit contact form. Please try again later.'
+    });
 
     return new NextResponse(
       JSON.stringify({
