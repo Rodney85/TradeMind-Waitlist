@@ -14,15 +14,40 @@ export function WaitlistForm() {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast.success("Welcome aboard!", {
-      description: "You're on the waitlist. We'll be in touch soon.",
-    });
-    
-    setEmail("");
-    setLoading(false);
+    try {
+      console.log('Submitting email:', email);
+
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('Subscription Error:', data);
+        throw new Error(data.message || 'Failed to subscribe');
+      }
+
+      console.log('Success:', data);
+      toast.success("Welcome aboard! 🚀", {
+        description: "You're on the waitlist. We'll be in touch soon.",
+      });
+      
+      setEmail("");
+    } catch (error) {
+      console.error('Detailed error:', error);
+      toast.error("Subscription Failed", {
+        description: error instanceof Error ? error.message : "Please try again or contact support if the issue persists.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

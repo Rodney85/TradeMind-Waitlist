@@ -20,11 +20,27 @@ export function ContactForm() {
       message: formData.get("message"),
     };
 
-    // TODO: Implement actual form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-    toast.success("Message sent successfully!");
-    setIsLoading(false);
-    (e.target as HTMLFormElement).reset();
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+
+      toast.success("Message sent successfully!");
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -55,10 +71,14 @@ export function ContactForm() {
           placeholder="Your Message"
           required
           disabled={isLoading}
-          className="min-h-[150px] bg-white/10 border-white/20 placeholder:text-white/60"
+          className="bg-white/10 border-white/20 placeholder:text-white/60 min-h-[120px]"
         />
       </div>
-      <Button type="submit" className="w-full bg-white text-black hover:bg-white/90" disabled={isLoading}>
+      <Button 
+        type="submit"
+        disabled={isLoading}
+        className="w-full"
+      >
         {isLoading ? "Sending..." : "Send Message"}
       </Button>
     </form>
