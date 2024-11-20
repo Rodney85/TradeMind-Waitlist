@@ -29,15 +29,17 @@ export function ContactForm() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        throw new Error(result.error || 'Failed to submit form');
       }
 
       toast.success("Message sent successfully!");
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error("Failed to send message. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to send message. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -49,36 +51,32 @@ export function ContactForm() {
         <Input
           type="text"
           name="name"
-          placeholder="Your Name"
+          placeholder="Your name"
           required
           disabled={isLoading}
-          className="bg-white/10 border-white/20 placeholder:text-white/60"
+          className="w-full"
         />
       </div>
       <div>
         <Input
           type="email"
           name="email"
-          placeholder="Your Email"
+          placeholder="Your email"
           required
           disabled={isLoading}
-          className="bg-white/10 border-white/20 placeholder:text-white/60"
+          className="w-full"
         />
       </div>
       <div>
         <Textarea
           name="message"
-          placeholder="Your Message"
+          placeholder="Your message"
           required
           disabled={isLoading}
-          className="bg-white/10 border-white/20 placeholder:text-white/60 min-h-[120px]"
+          className="w-full min-h-[100px]"
         />
       </div>
-      <Button 
-        type="submit"
-        disabled={isLoading}
-        className="w-full"
-      >
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? "Sending..." : "Send Message"}
       </Button>
     </form>

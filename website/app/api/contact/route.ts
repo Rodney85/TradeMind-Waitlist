@@ -2,6 +2,17 @@ import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
 import { MongoClient } from 'mongodb'
 
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
+}
+
 export async function POST(request: Request) {
   let client: MongoClient | null = null;
   
@@ -9,11 +20,26 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { name, email, message } = body
 
+    console.log('Received contact form submission:', { name, email });
+
     // Validate the input
     if (!name || !email || !message) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
+      return new NextResponse(
+        JSON.stringify({
+          error: 'Missing required fields',
+          details: {
+            name: !name ? 'Name is required' : null,
+            email: !email ? 'Email is required' : null,
+            message: !message ? 'Message is required' : null,
+          }
+        }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          }
+        }
       )
     }
 
@@ -31,11 +57,20 @@ export async function POST(request: Request) {
 
     console.log('Successfully saved contact form:', { id: result.insertedId });
 
-    return NextResponse.json({ 
-      success: true, 
-      id: result.insertedId,
-      message: 'Contact form submitted successfully' 
-    })
+    return new NextResponse(
+      JSON.stringify({
+        success: true,
+        id: result.insertedId,
+        message: 'Contact form submitted successfully'
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        }
+      }
+    )
   } catch (error) {
     console.error('Detailed error in contact form submission:', {
       error: error instanceof Error ? {
@@ -45,12 +80,18 @@ export async function POST(request: Request) {
       mongoClientConnected: !!client
     });
 
-    return NextResponse.json(
-      { 
+    return new NextResponse(
+      JSON.stringify({
         error: 'Failed to submit contact form. Please try again later.',
         details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        }
+      }
     )
   }
 }
