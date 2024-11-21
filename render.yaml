@@ -11,8 +11,8 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        sync: false
+        value: mongodb+srv://its-rod:p9MMIcMFH4ZLsKrx@cluster0.gyonk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       - key: BEEHIIV_API_KEY
-        sync: false
+        value: 4jnun3562IJfdalGKp6tIeUc54pqOJMyny4jSwMwi5aBkQKBfiN2bDhExANCos7m
       - key: BEEHIIV_PUBLICATION_ID
-        sync: false
+        value: pub_52e2f029-baeb-412c-9261-e15456e076e9
