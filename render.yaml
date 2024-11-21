@@ -2,9 +2,11 @@ services:
   - type: web
     name: tm-landing-page
     env: static
-    rootDir: website  # Root directory where your website code is located
-    buildCommand: npm run build  # Command to build your website
-    staticPublishPath: ./dist  # Directory containing your built assets
+    rootDir: website
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./website/.next
     envVars:
       - key: NODE_VERSION
-        value: 18.0.0  # Specify the Node.js version you want to use
+        value: 18.0.0
+      - key: NODE_ENV
+        value: production
