@@ -67,7 +67,7 @@ export function ContactForm() {
           type="text"
           name="name"
           id="name"
-          autocomplete="name"
+          autoComplete="name"
           placeholder="Your name"
           required
           disabled={isLoading}
@@ -79,7 +79,7 @@ export function ContactForm() {
           type="email"
           name="email"
           id="email"
-          autocomplete="email"
+          autoComplete="email"
           placeholder="Your email"
           required
           disabled={isLoading}
@@ -90,7 +90,7 @@ export function ContactForm() {
         <Textarea
           name="message"
           id="message"
-          autocomplete="off"
+          autoComplete="off"
           placeholder="Your message"
           required
           disabled={isLoading}
