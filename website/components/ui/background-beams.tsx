@@ -25,7 +25,18 @@ export const BackgroundBeams = React.memo(
       "M-268 -317C-268 -317 -200 88 264 215C728 342 796 747 796 747",
       "M-261 -325C-261 -325 -193 80 271 207C735 334 803 739 803 739",
       "M-254 -333C-254 -333 -186 72 278 199C742 326 810 731 810 731",
-      "M-247 -341C-247 -341 -179 64 285 191C749 318 817 723 817 723"
+      "M-247 -341C-247 -341 -179 64 285 191C749 318 817 723 817 723",
+      // Mirror paths for better distribution
+      "M380 -189C380 -189 312 216 -152 343C-616 470 -684 875 -684 875",
+      "M373 -197C373 -197 305 208 -159 335C-623 462 -691 867 -691 867",
+      "M366 -205C366 -205 298 200 -166 327C-630 454 -698 859 -698 859",
+      "M359 -213C359 -213 291 192 -173 319C-637 446 -705 851 -705 851",
+      "M352 -221C352 -221 284 184 -180 311C-644 438 -712 843 -712 843",
+      "M345 -229C345 -229 277 176 -187 303C-651 430 -719 835 -719 835",
+      "M338 -237C338 -237 270 168 -194 295C-658 422 -726 827 -726 827",
+      "M331 -245C331 -245 263 160 -201 287C-665 414 -733 819 -733 819",
+      "M324 -253C324 -253 256 152 -208 279C-672 406 -740 811 -740 811",
+      "M317 -261C317 -261 249 144 -215 271C-679 398 -747 803 -747 803"
     ];
 
     return (
@@ -39,17 +50,11 @@ export const BackgroundBeams = React.memo(
           className="z-0 h-full w-full pointer-events-none absolute"
           width="100%"
           height="100%"
-          viewBox="0 0 696 316"
+          viewBox="-800 -400 1600 1600"
+          preserveAspectRatio="xMidYMid slice"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            d="M-380 -189C-380 -189 -312 216 152 343C616 470 684 875 684 875"
-            stroke="url(#paint0_radial_242_278)"
-            strokeOpacity="0.05"
-            strokeWidth="0.5"
-          />
-
           {paths.map((path, index) => (
             <motion.path
               key={`path-${index}`}
@@ -78,10 +83,10 @@ export const BackgroundBeams = React.memo(
                   y2: ["0%", `${93 + Math.random() * 8}%`],
                 }}
                 transition={{
-                  duration: Math.random() * 10 + 10,
+                  duration: Math.random() * 10 + 20,
                   ease: "easeInOut",
                   repeat: Infinity,
-                  delay: Math.random() * 10,
+                  delay: Math.random() * 5,
                 }}
               >
                 <stop stopColor="#18CCFC" stopOpacity="0" />
@@ -97,7 +102,7 @@ export const BackgroundBeams = React.memo(
               cy="0"
               r="1"
               gradientUnits="userSpaceOnUse"
-              gradientTransform="translate(352 34) rotate(90) scale(555 1560.62)"
+              gradientTransform="translate(0 0) rotate(90) scale(800 1600)"
             >
               <stop offset="0.0666667" stopColor="var(--neutral-300)" />
               <stop offset="0.243243" stopColor="var(--neutral-300)" />

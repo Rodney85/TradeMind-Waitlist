@@ -17,7 +17,7 @@ import Image from "next/image";
 
 export function FeaturesSection() {
   return (
-    <div className="relative min-h-screen">
+    <div id="features" className="relative min-h-screen">
       <div className="absolute inset-0">
         <div className="h-full w-full dark:bg-black bg-white [background-size:16px_16px] [background-image:radial-gradient(rgba(0,0,0,0.2)_1px,transparent_1px)] dark:[background-image:radial-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)]">
           <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>

@@ -6,12 +6,14 @@ import { FeaturesSection } from "@/components/features-section";
 import { Footer } from "@/components/footer";
 import { Brain, LineChart, TrendingUp, BarChart3, Target, ArrowRight } from "lucide-react";
 import { HeroSection } from "@/components/hero-section";
+import { AboutSection } from "@/components/about-section";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       <Navbar />
       <HeroSection />
+      <AboutSection />
       <FeaturesSection />
       <Footer />
     </main>

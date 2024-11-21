@@ -2,24 +2,44 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Github, Twitter, Brain } from "lucide-react";
+import { motion } from "framer-motion";
+import { WaitlistForm } from "./waitlist-form";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-black">
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+    <footer className="relative border-t border-white/10 bg-black">
+      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:60px_60px]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/50 to-black/0" />
+      
+      <div className="relative container mx-auto px-4 py-16">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           {/* Brand and Description */}
-          <div className="space-y-3 md:max-w-xs">
-            <div className="flex items-center gap-2">
+          <div className="md:col-span-4 space-y-3">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-2"
+            >
               <Brain className="h-5 w-5 text-white" />
               <h3 className="text-lg font-semibold text-white">TradeMind</h3>
-            </div>
-            <p className="text-sm text-white/60">
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-sm text-white/60"
+            >
               Transform your trading performance with AI-powered insights and systematic journaling.
-            </p>
-            <div className="flex items-center gap-2 pt-2">
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex items-center gap-2 pt-2"
+            >
               <Button variant="outline" size="icon" className="bg-white/5 border-white/10 hover:bg-white/10" asChild>
                 <Link href="https://twitter.com" target="_blank">
                   <Twitter className="h-4 w-4 text-white/60" />
@@ -32,11 +52,16 @@ export function Footer() {
                   <span className="sr-only">GitHub</span>
                 </Link>
               </Button>
-            </div>
+            </motion.div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="md:col-span-3 space-y-4"
+          >
             <h3 className="text-sm font-medium text-white/80">Quick Links</h3>
             <ul className="space-y-3">
               <li>
@@ -60,31 +85,43 @@ export function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Newsletter */}
-          <div className="space-y-4 md:max-w-sm w-full">
-            <h3 className="text-sm font-medium text-white/80">Stay Updated</h3>
-            <p className="text-sm text-white/60">
-              Subscribe to our newsletter for updates and trading insights.
-            </p>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex h-9 w-full rounded-md bg-white/5 border border-white/10 px-3 py-1 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-white/20 transition-colors"
-              />
-              <Button type="submit" size="sm" className="bg-white text-black hover:bg-white/90 transition-colors">
-                Subscribe
-              </Button>
-            </form>
-          </div>
+          {/* Waitlist Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="md:col-span-5 space-y-6"
+          >
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Join the Waitlist</h3>
+              <p className="text-sm text-white/60">
+                Be among the first to experience the future of trading psychology.
+              </p>
+            </div>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-30"></div>
+              <div className="relative bg-black/40 border border-white/10 rounded-lg p-4">
+                <WaitlistForm />
+                <div className="flex items-center justify-center gap-x-8 text-xs text-white/40 mt-4">
+                  <span> Spots filling up fast</span>
+                  <span><span className="text-blue-400 font-medium">2,000+</span> traders joined</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/10 text-center text-sm text-white/40">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/40"
+        >
           <p>&copy; {new Date().getFullYear()} TradeMind. All rights reserved.</p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );
