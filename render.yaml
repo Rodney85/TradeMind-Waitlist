@@ -10,3 +10,9 @@ services:
         value: 18.0.0
       - key: NODE_ENV
         value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: BEEHIIV_API_KEY
+        sync: false
+      - key: BEEHIIV_PUBLICATION_ID
+        sync: false
