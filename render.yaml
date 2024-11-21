@@ -10,9 +10,3 @@ services:
         value: 18.0.0
       - key: NODE_ENV
         value: production
-      - key: MONGODB_URI
-        value: mongodb+srv://its-rod:p9MMIcMFH4ZLsKrx@cluster0.gyonk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      - key: BEEHIIV_API_KEY
-        value: 4jnun3562IJfdalGKp6tIeUc54pqOJMyny4jSwMwi5aBkQKBfiN2bDhExANCos7m
-      - key: BEEHIIV_PUBLICATION_ID
-        value: pub_52e2f029-baeb-412c-9261-e15456e076e9

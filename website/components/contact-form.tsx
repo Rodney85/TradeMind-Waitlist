@@ -67,6 +67,7 @@ export function ContactForm() {
           type="text"
           name="name"
           id="name"
+          autoCapitalize="off"
           autoComplete="name"
           placeholder="Your name"
           required
@@ -79,6 +80,7 @@ export function ContactForm() {
           type="email"
           name="email"
           id="email"
+          autoCapitalize="off"
           autoComplete="email"
           placeholder="Your email"
           required
@@ -90,6 +92,7 @@ export function ContactForm() {
         <Textarea
           name="message"
           id="message"
+          autoCapitalize="off"
           autoComplete="off"
           placeholder="Your message"
           required
