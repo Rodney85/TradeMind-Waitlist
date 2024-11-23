@@ -33,7 +33,7 @@ export function AboutSection() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="relative text-4xl font-bold tracking-tight text-white sm:text-5xl bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80"
             >
-              The Psychology of Trading
+              Imagine trading without emotional turbulence.
             </motion.h2>
           </CardHeader>
           <CardContent className="relative pt-6">
@@ -45,11 +45,13 @@ export function AboutSection() {
             >
               <div className="space-y-4">
                 <p className="text-lg leading-8 text-gray-300">
-                  TraderMind was born from a simple truth: <span className="text-blue-400 font-semibold">successful trading is 80% psychology</span>. 
-                  We&apos;re building the first AI-powered trading journal that focuses on the mental game.
+                  What if your biggest competitor is not the market, but your own psychology?
                 </p>
                 <p className="text-lg leading-8 text-gray-400">
-                  Our platform helps traders understand and improve their psychological patterns while making the journey engaging and rewarding.
+                  Traditional trading advice fails. <span className="text-blue-400 font-semibold">95% of traders lose money</span> - not because of strategy, but because of mind.
+                </p>
+                <p className="text-lg leading-8 text-gray-300">
+                  TradeMind is an AI-powered companion that understands your trading psychology better than you do, providing you with the insights and tools to overcome emotional biases and achieve consistent profitability.
                 </p>
               </div>
               <div className="relative group">

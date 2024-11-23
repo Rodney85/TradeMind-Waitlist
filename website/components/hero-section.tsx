@@ -22,9 +22,9 @@ export function HeroSection() {
               transition={{ delay: 0.2 }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-center"
             >
-              <span className="block text-white mb-1 sm:mb-2 leading-[1.1]">Level Up Your</span>
+              <span className="block text-white mb-1 sm:mb-2 leading-[1.1]">Trading</span>
               <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 leading-[1.1]">
-                Trading Psychology
+                Transformed. Psychology Decoded.
               </span>
             </motion.h1>
 
@@ -34,7 +34,7 @@ export function HeroSection() {
               transition={{ delay: 0.3 }}
               className="text-lg sm:text-xl md:text-2xl text-white/60 max-w-[600px] mx-auto text-center font-light"
             >
-              AI-powered trading journal that makes mastering your mindset fun and rewarding.
+              AI-Powered Insights. Your Unfair Advantage.
             </motion.p>
           </div>
 

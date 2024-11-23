@@ -32,7 +32,7 @@ export function Footer() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-sm text-white/60"
             >
-              Transform your trading performance with AI-powered insights and systematic journaling.
+              More Than a Tool. A Psychological Trading Breakthrough.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -70,18 +70,13 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Contact
+                <Link href="/privacy" className="text-sm text-white/60 hover:text-white transition-colors">
+                  Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Privacy
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Terms
+                <Link href="/terms" className="text-sm text-white/60 hover:text-white transition-colors">
+                  Terms of Service
                 </Link>
               </li>
             </ul>
@@ -95,9 +90,9 @@ export function Footer() {
             className="md:col-span-5 space-y-6"
           >
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">Join the Waitlist</h3>
+              <h3 className="text-lg font-semibold text-white">Be Among the First to Transform Your Trading Mind</h3>
               <p className="text-sm text-white/60">
-                Be among the first to experience the future of trading psychology.
+                Join the Growing Community. 1,000+ Traders Already Waiting. Something big is coming. Are you ready?
               </p>
             </div>
             <div className="relative">
@@ -113,15 +108,12 @@ export function Footer() {
           </motion.div>
         </div>
 
-        {/* Bottom Bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/40"
-        >
-          <p>&copy; {new Date().getFullYear()} TradeMind. All rights reserved.</p>
-        </motion.div>
+        {/* Copyright */}
+        <div className="mt-8 pt-8 border-t border-white/10">
+          <p className="text-sm text-white/60 text-center">
+            &copy; {new Date().getFullYear()} TradeMind. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );
